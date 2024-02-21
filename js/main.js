@@ -193,7 +193,7 @@ class GestorTransacciones {
 }
 
 function mostrarMenuPrincipal(gestorTransacciones) {
-    mostrarMensaje(mensajeBienvenida, "bienvenidaUsuario");
+    //mostrarMensaje(mensajeBienvenida, "bienvenidaUsuario");
     const menuHtml = `<div class="menu">
     <h2>Gestión de transacciones</h2>
     <p>Ingrese una opción del 1 al 6:</p>
@@ -209,7 +209,8 @@ function mostrarMenuPrincipal(gestorTransacciones) {
 `;
     // Agregar el menu a la pagina
     const containerDiv = document.querySelector('.container');
-    containerDiv.innerHTML = menuHtml;
+
+    containerDiv.innerHTML += menuHtml;
 
     // Agregar eventos a los botones del menu
     document.getElementById('opcion1').addEventListener('click', () => gestionarTransaccionesSubMenu(gestorTransacciones));
@@ -223,7 +224,7 @@ function mostrarMenuPrincipal(gestorTransacciones) {
 }
 
 function principal() {
-    
+
     let gestorTransacciones = recuperarGestorTransaccionesDelLocalStorage();
     if (gestorTransacciones === null || !(gestorTransacciones instanceof GestorTransacciones)) {
         gestorTransacciones = new GestorTransacciones();
@@ -613,7 +614,7 @@ function recuperarGestorTransaccionesDelLocalStorage() {
     }
 }
 
-/* Manipulación del DOM y eventos del usuario */
+/* DOM y eventos del usuario */
 document.addEventListener('DOMContentLoaded', function () {
     const formularioDiv = document.getElementById('formulario');
     const formHtml = `
@@ -636,30 +637,25 @@ document.addEventListener('DOMContentLoaded', function () {
         if (nombreUsuario) {
             mensajeBienvenida = `Bienvenido/a ${nombreUsuario} a Presupuesto360`;
             mostrarMensaje(mensajeBienvenida, "bienvenidaUsuario");
+            principal();
         } else {
             mostrarMensaje('Por favor, ingrese su nombre.', "noBienvenidaUsuario");
         }
     });
 });
 
+
 function mostrarMensaje(mensaje, id) {
 
-    const mensajeDivAnterior = document.getElementById('bienvenidaUsuario');
+    const mensajeDiv = document.createElement('div');
+    mensajeDiv.innerHTML = mensaje;
+    mensajeDiv.id = id;
+    mensajeDiv.classList.add('mensaje');
 
-    if (!mensajeDivAnterior) {
-        const mensajeDiv = document.createElement('div');
-        mensajeDiv.innerHTML = mensaje;
-        mensajeDiv.id = id;
-        mensajeDiv.classList.add('mensaje');
+    const containerDiv = document.querySelector('.container');
+    containerDiv.innerHTML = '';
+    containerDiv.appendChild(mensajeDiv);
 
-        const containerDiv = document.querySelector('.container');
-        containerDiv.innerHTML = '';
-        containerDiv.appendChild(mensajeDiv);
-        // Llamar a la función principal después de mostrar el mensaje de bienvenida
-        if (id === "bienvenidaUsuario") {
-            principal();
-        }
-    }
 }
 
 function mostrarMensajeTemporal(mensaje) {
